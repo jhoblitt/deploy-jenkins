@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<com.cloudbees.jenkins.GitHubPushTrigger_-DescriptorImpl plugin="github@1.12.0">
+  <manageHook>true</manageHook>
+  <credentials>
+    <com.cloudbees.jenkins.Credential>
+        <username><%= @github['username'] %></username>
+      <apiUrl></apiUrl>
+      <oauthAccessToken><%= @hipchat['oauthaccesstoken'] %></oauthAccessToken>
+    </com.cloudbees.jenkins.Credential>
+  </credentials>
+</com.cloudbees.jenkins.GitHubPushTrigger_-DescriptorImpl>

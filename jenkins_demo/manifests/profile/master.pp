@@ -45,7 +45,23 @@ class jenkins_demo::profile::master {
     }
   }
 
-  jenkins::plugin { 'github': }
+  jenkins::job { 'lsstsw':
+    config => template("${module_name}/jobs/lsstsw/config.xml"),
+  }
+
+  $github = hiera('jenkins::plugin::github', undef)
+  if $github {
+    $github_xml = 'com.cloudbees.jenkins.GitHubPushTrigger.xml'
+    jenkins::plugin { 'github':
+      manage_config   => true,
+      config_filename => $github_xml,
+      config_content  => template("${module_name}/plugins/${github_xml}"),
+    }
+  } else {
+    jenkins::plugin { 'github': }
+  }
+
+  #jenkins::plugin { 'github': }
     jenkins::plugin { 'git': }
       jenkins::plugin { 'scm-api': }
       jenkins::plugin { 'git-client': }
