@@ -112,6 +112,9 @@ class jenkins_demo::profile::master {
   jenkins::plugin { 'purge-build-queue-plugin': }
     #jenkins::plugin { 'maven-plugin': }
 
+  # sensu-plugins-jenkins uses api endpoints provided by this plugin
+  jenkins::plugin { 'metrics': }
+
   #
   # https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+behind+an+NGinX+reverse+proxy
 
