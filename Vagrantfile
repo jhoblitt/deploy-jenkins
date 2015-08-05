@@ -47,6 +47,10 @@ def master_ami
   ENV['MASTER_AMI'] || 'ami-65112355'
 end
 
+def sensu_ami
+  ENV['SENSU_AMI'] || 'ami-65112355'
+end
+
 def centos6_ami
   ENV['CENTOS6_AMI'] || 'ami-bd10228d'
 end
@@ -65,7 +69,7 @@ Vagrant.configure('2') do |config|
 
       provider.ami = master_ami
       provider.private_ip_address = '192.168.123.10'
-      provider.elastic_ip = ELASTIC_IP
+      provider.elastic_ip = ELASTIC_IP_JENKINS
       provider.security_groups = [
         SECURITY_GROUP_ID_INTERNAL,
         SECURITY_GROUP_ID_SSH,
@@ -79,6 +83,42 @@ Vagrant.configure('2') do |config|
       puppet.manifests_path = "manifests"
       puppet.module_path = "modules"
       puppet.manifest_file = "default.pp"
+      puppet.hiera_config_path = "hiera.yaml"
+      puppet.options = [
+       '--verbose',
+       '--trace',
+       '--report',
+       '--show_diff',
+       '--pluginsync',
+       '--disable_warnings=deprecations',
+      ]
+    end
+  end
+
+  config.vm.define 'sensu' do |define|
+    hostname = gen_hostname('sensu')
+    define.vm.hostname = hostname
+
+    define.vm.provider :aws do |provider, override|
+      ci_hostname(hostname, provider)
+
+      provider.ami = sensu_ami
+      provider.private_ip_address = '192.168.123.20'
+      provider.elastic_ip = ELASTIC_IP_UCHIWA
+      provider.security_groups = [
+        SECURITY_GROUP_ID_INTERNAL,
+        SECURITY_GROUP_ID_SSH,
+        SECURITY_GROUP_ID_HTTP,
+      ]
+      provider.instance_type = 't2.medium'
+      provider.ebs_optimized = false
+      provider.tags = { 'Name' => hostname }
+    end
+
+    define.vm.provision "puppet", type: :puppet, preserve_order: true do |puppet|
+      puppet.manifests_path = "manifests"
+      puppet.module_path = "modules"
+      puppet.manifest_file = "sensu.pp"
       puppet.hiera_config_path = "hiera.yaml"
       puppet.options = [
        '--verbose',

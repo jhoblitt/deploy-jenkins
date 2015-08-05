@@ -85,6 +85,10 @@ resource "aws_eip" "jenkins-demo-master" {
     vpc = true
 }
 
+resource "aws_eip" "jenkins-demo-uchiwa" {
+    vpc = true
+}
+
 resource "aws_security_group" "jenkins-demo-ssh" {
     vpc_id = "${aws_vpc.jenkins-demo.id}"
     name = "${var.demo_name}-ssh"

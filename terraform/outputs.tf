@@ -1,5 +1,9 @@
-output "ELASTIC_IP" {
+output "ELASTIC_IP_JENKINS" {
   value = "${aws_eip.jenkins-demo-master.public_ip}"
+}
+
+output "ELASTIC_IP_UCHIWA" {
+  value = "${aws_eip.jenkins-demo-uchiwa.public_ip}"
 }
 
 output "SUBNET_ID" {

@@ -9,6 +9,11 @@ class jenkins_demo::profile::base {
     ip     => '192.168.123.10',
   }
 
+  host { 'jenkins-sensu':
+    ensure => 'present',
+    ip     => '192.168.123.20',
+  }
+
   class { 'timezone': timezone  => 'US/Pacific' }
   class { 'tuned': profile      => 'virtual-host' }
   class { 'firewall': ensure    => 'stopped' }
