@@ -7,8 +7,8 @@ digraph top {
 
   {
     node [shape=ellipse fontsize=24 style=filled fillcolor=white]
-    eip [label="elastic IP"]
-    nginx [label="nginx proxy"]
+    jeip [label="elastic IP"]
+    jnginx [label="nginx proxy"]
     jmaster [label="jenkins master"]
     jswarm [label="swarm client"]
     jel61 [label="swarm client"]
@@ -29,6 +29,25 @@ digraph top {
     gel71 [label="gmond"]
     gel72 [label="gmond"]
     gel73 [label="gmond"]
+
+    ueip [label="elastic IP"]
+    unginx [label="nginx proxy"]
+    uchiwa
+    oauth2_proxy
+    sensuapi [label="sensu-api"]
+    sensuserver [label="sensu-server"]
+    redis
+    rabbitmq
+    sensuclient [label="sensu-client"]
+    smaster [label="sensu-client"]
+    sel61 [label="sensu-client"]
+    sel62 [label="sensu-client"]
+    sel63 [label="sensu-client"]
+    sel71 [label="sensu-client"]
+    sel72 [label="sensu-client"]
+    sel73 [label="sensu-client"]
+
+    github [label="github oauth"]
   }
 
   color=lightgrey
@@ -39,16 +58,15 @@ digraph top {
   subgraph cluster_0 {
     label="VPC"
 
-    eip
-
     subgraph cluster_1 {
       label="master"
-      nginx
+      jnginx
       jmaster
       jswarm
       phpfpm
       gmetad
       gmond
+      smaster
     }
 
     subgraph cluster_2 {
@@ -56,42 +74,70 @@ digraph top {
 
       jel61
       gel61
+      sel61
     }
     subgraph cluster_3 {
       label="slave el6-2"
       jel62
       gel62
+      sel62
     }
     subgraph cluster_4 {
       label="slave el6-3"
       jel63
       gel63
+      sel63
     }
 
     subgraph cluster_5 {
       label="slave el7-1"
       jel71
       gel71
+      sel71
     }
     subgraph cluster_6 {
       label="slave el7-2"
       jel72
       gel72
+      sel72
     }
     subgraph cluster_7 {
       label="slave el7-3"
       jel73
       gel73
+      sel73
+    }
+
+    subgraph cluster_8 {
+      label="sensu"
+
+      unginx
+      uchiwa
+      oauth2_proxy
+      sensuapi
+      sensuserver
+      sensuclient
+      rabbitmq
+      redis
     }
   }
 
   // https
   edge [color=red]
-  eip -> nginx
+  jeip -> jnginx
+  ueip -> unginx
+  github -> jmaster [dir=back style=dashed]
+  github -> oauth2_proxy [dir=back style=dashed]
+  github -> jeip
+  github -> ueip
+  {rank=same jeip ueip github}
 
   // http
   edge [color=orange]
-  nginx -> jmaster
+  jnginx -> jmaster
+  unginx -> oauth2_proxy
+  oauth2_proxy -> uchiwa
+  uchiwa -> sensuapi
 
   // jnlp
   edge [color=blue]
@@ -105,7 +151,7 @@ digraph top {
 
   // fastcgi
   edge [color=khaki3]
-  nginx -> phpfpm
+  jnginx -> phpfpm
 
   // filesystem
   edge [color=black]
@@ -123,4 +169,22 @@ digraph top {
   gmond -> gel71 [dir=back]
   gmond -> gel72 [dir=back]
   gmond -> gel73 [dir=back]
+
+  // amqp
+  edge [color=brown]
+  sensuserver -> rabbitmq [dir=both]
+  sensuapi -> rabbitmq [dir=both]
+  sensuclient -> rabbitmq [dir=both]
+  rabbitmq -> smaster [dir=both]
+  rabbitmq -> sel61 [dir=both]
+  rabbitmq -> sel62 [dir=both]
+  rabbitmq -> sel63 [dir=both]
+  rabbitmq -> sel71 [dir=both]
+  rabbitmq -> sel72 [dir=both]
+  rabbitmq -> sel73 [dir=both]
+
+  // redis tcp
+  edge [color=purple]
+  sensuserver -> redis
+  sensuapi -> redis
 }
