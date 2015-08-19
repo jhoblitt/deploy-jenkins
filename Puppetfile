@@ -47,6 +47,7 @@ mod 'sensu/sensu',
   :path => '/home/jhoblitt/github/sensu-puppet'
   #:git => 'https://github.com/jhoblitt/sensu-puppet.git',
   #:ref => '91c5b0abc8355dc8874275463663544e3dc5b7bc'
+mod 'jhoblitt/oauth2_proxy', '~> 0.1.0'
 
 mod 'puppetlabs/gcc', '~> 0.3'
 mod 'yelp-uchiwa', '~> 0.3'

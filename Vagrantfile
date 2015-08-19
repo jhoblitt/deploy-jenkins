@@ -100,7 +100,7 @@ Vagrant.configure('2') do |config|
     define.vm.hostname = hostname
 
     define.vm.provider :aws do |provider, override|
-      ci_hostname(hostname, provider)
+      ci_hostname(hostname, provider, 'sensu')
 
       provider.ami = sensu_ami
       provider.private_ip_address = '192.168.123.20'
@@ -118,7 +118,7 @@ Vagrant.configure('2') do |config|
     define.vm.provision "puppet", type: :puppet, preserve_order: true do |puppet|
       puppet.manifests_path = "manifests"
       puppet.module_path = "modules"
-      puppet.manifest_file = "sensu.pp"
+      puppet.manifest_file = "default.pp"
       puppet.hiera_config_path = "hiera.yaml"
       puppet.options = [
        '--verbose',

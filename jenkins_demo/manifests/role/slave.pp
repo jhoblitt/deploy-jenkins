@@ -3,9 +3,10 @@ class jenkins_demo::role::slave {
   include ::jenkins_demo::profile::ganglia::gmond
   include ::jenkins_demo::profile::slave
   include ::jenkins_demo::profile::sensu::base
-  include ::jenkins_demo::profile::sensu::client
-  include ::jenkins_demo::profile::sensu::check::base
-  include ::jenkins_demo::profile::sensu::check::jenkins_slave
+
+  sensu::subscription { 'base': }
+  sensu::subscription { 'jenkins-slave': }
+
   class { 'selinux': mode => 'disabled' }
 
   if $::operatingsystemmajrelease == '6' {

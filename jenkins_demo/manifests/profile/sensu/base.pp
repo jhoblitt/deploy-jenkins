@@ -14,6 +14,7 @@ class jenkins_demo::profile::sensu::base {
     'sensu-plugins-ntp',
     'sensu-plugins-redis',
     'sensu-plugins-process-checks',
+    'sensu-plugins-ssl',
   ]
 
   # sensu must be installed before the sensu_gem provider is functional

@@ -3,6 +3,8 @@ class jenkins_demo::profile::base {
   include ::sysstat
   include ::irqbalance
   include ::ntp
+  # note that restricting ntpd to the loopback addresses breaks the test
+  # sensu's check-ntp.rb does with ntpq
 
   host { 'jenkins-master':
     ensure => 'present',
