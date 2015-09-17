@@ -18,6 +18,7 @@ lsststack::lsstsw::buildbot_ensure: latest
 lsststack::lsstsw::lsst_build_repo: 'https://github.com/lsst/lsst_build.git'
 lsststack::lsstsw::lsst_build_branch: master
 lsststack::lsstsw::lsst_build_ensure: present
+vagrant::version: 1.7.4
 nginx::config::confd_purge: true
 nginx::config::vhost_purge: true
 nginx::config::spdy: 'on'

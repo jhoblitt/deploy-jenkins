@@ -36,6 +36,7 @@ mod 'puppetlabs/concat',
   :ref => 'fd4f1e2d46a86f1659da420f4ce042882d38e021'
 
 mod 'stankevich/python', '~> 1.9'
+mod 'unibet/vagrant', '~> 0.1.13'
 
 mod 'lsst/jenkins_demo', :path => './jenkins_demo'
 

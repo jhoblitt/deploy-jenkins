@@ -1,6 +1,7 @@
 class jenkins_demo::profile::master {
   include ::wget # needed by jenkins
   include ::nginx
+  include ::vagrant
 
   Class['::wget'] -> Class['::jenkins']
   # lint:ignore:arrow_alignment
@@ -23,8 +24,9 @@ class jenkins_demo::profile::master {
   # executed under the jenkins-slave user.  jenkins user.
   class { 'jenkins::slave':
     masterurl    => 'http://jenkins-master:8080',
-    executors    => 1,
+    executors    => 100,
     slave_mode   => 'exclusive',
+    labels       => 'vagrant',
     install_java => false,
   }
 
