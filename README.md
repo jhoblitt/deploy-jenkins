@@ -235,7 +235,7 @@ Build 'amazon-ebs' finished.
 ==> Builds finished. The artifacts of successful builds are:
 --> amazon-ebs: AMIs were created:
 
-us-east-1: ami-974d85fc
+us-east-1: ami-67e28202
 --> amazon-ebs: 'aws' provider box: builds/__unset_box_basename__.aws.box
 ```
 
@@ -249,7 +249,7 @@ Build 'amazon-ebs' finished.
 ==> Builds finished. The artifacts of successful builds are:
 --> amazon-ebs: AMIs were created:
 
-us-east-1: ami-3331f958
+us-east-1: ami-ffe3839a
 --> amazon-ebs: 'aws' provider box: builds/__unset_box_basename__.aws.box
 ```
 
@@ -257,8 +257,8 @@ us-east-1: ami-3331f958
 
 To be used by vagrant.
 
-    export CENTOS6_AMI=ami-974d85fc
-    export CENTOS7_AMI=ami-3331f958
+    export CENTOS6_AMI=ami-67e28202
+    export CENTOS7_AMI=ami-ffe3839a
     export MASTER_AMI=$CENTOS7_AMI
     cd ..
 
