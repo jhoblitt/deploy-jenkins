@@ -1,0 +1,12 @@
+---
+classes:
+  - jenkins_demo::role::sensu
+sensu::server: true
+sensu::api: true
+sensu::api_port: 4567
+sensu::api_user: sensu
+sensu::api_password: sensutest
+#sensu::api_bind: '127.0.0.1'
+sensu::plugins::hipchat::apikey: "%{hiera('jenkins::plugins::hipchat::token')}"
+sensu::plugins::hipchat::room: 'Bot: 扇子'
+sensu::plugins::hipchat::from: Sensu

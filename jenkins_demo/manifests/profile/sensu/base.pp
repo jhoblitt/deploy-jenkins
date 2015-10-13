@@ -1,4 +1,43 @@
 class jenkins_demo::profile::sensu::base {
+  # if this is el7+, we want to manage the sensu user directly so we can add it
+  # to the systemd-journal group.
+  if $::osfamily == 'RedHat'
+      and (versioncmp($::operatingsystemmajrelease, '6') > 0) {
+    # manage the user account directly and *disable* the sensu classes
+    # management.
+    $manage_user = false
+  } else {
+    $manage_user = true
+  }
+
+  unless $manage_user {
+    user { 'sensu':
+      ensure  => 'present',
+      system  => true,
+      home    => '/opt/sensu',
+      shell   => '/bin/false',
+      comment => 'Sensu Monitoring Framework',
+      groups  => ['systemd-journal'],
+    }
+
+    group { 'sensu':
+      ensure => 'present',
+      system => true,
+    }
+  }
+
+  class { '::sensu':
+    #server                      => true,
+    #client                      => true,
+    #api                         => true,
+    manage_user                 => $manage_user,
+    client_custom               => {
+      # username => 'sensu',
+      password => 'sensutest',
+      #vhost    => 'sensu',
+    }
+  }
+
   # we're being lazy and installing the same set of plugins on all nodes
 
   # the selinux plugin is not yet released a a gem

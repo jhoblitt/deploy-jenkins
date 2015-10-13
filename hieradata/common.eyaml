@@ -35,12 +35,9 @@ sensu::rabbitmq_password: sensutest
 sensu::rabbitmq_vhost: sensu
 sensu::rabbitmq_port: 5672
 sensu::rabbitmq_reconnect_on_error: true
-#sensu::api: true
-#sensu::api_bind: '127.0.0.1'
-sensu::api_port: 4567
-sensu::api_user: sensu
-sensu::api_password: sensutest
+sensu::client: true
 www_host: citest.lsst.codes
+uchiwa_www_host: uchiwa.lsst.codes
 add_header:
   # 180d is required to get an A+ rating from ssllabs.com
   Strict-Transport-Security: "'max-age=15552000'"
