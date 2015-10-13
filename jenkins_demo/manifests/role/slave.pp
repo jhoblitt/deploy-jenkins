@@ -2,6 +2,8 @@ class jenkins_demo::role::slave {
   include ::jenkins_demo::profile::base
   include ::jenkins_demo::profile::ganglia::gmond
   include ::jenkins_demo::profile::slave
+  include ::jenkins_demo::profile::docker::base
+  include ::jenkins_demo::profile::docker::swarm
   class { 'selinux': mode => 'disabled' }
 
   if $::operatingsystemmajrelease == '6' {

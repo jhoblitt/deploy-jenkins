@@ -117,6 +117,15 @@ class jenkins_demo::profile::master {
     }
   }
 
+  jenkins::plugin { 'docker-plugin': }
+    jenkins::plugin { 'durable-task': }
+    jenkins::plugin { 'ssh-slaves': }
+    #jenkins::plugin { 'token-macro': }
+
+  jenkins::plugin { 'docker-build-publish': }
+    #jenkins::plugin { 'token-macro': }
+    jenkins::plugin { 'docker-commons': }
+
   $hipchat = hiera('jenkins::plugins::hipchat', undef)
 
   if $hipchat {

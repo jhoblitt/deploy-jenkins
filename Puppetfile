@@ -38,6 +38,9 @@ mod 'puppetlabs/concat',
 
 mod 'stankevich/python', '~> 1.11'
 
+mod 'garethr/docker', '~> 4.1'
+mod 'KyleAnderson/consul', '~> 1.0'
+
 mod 'lsst/jenkins_demo', :path => './jenkins_demo'
 
 # install ruby-devel & bundler for debugging inside VMs

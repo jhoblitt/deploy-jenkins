@@ -55,6 +55,12 @@ lsststack::lsstsw::buildbot_ensure: latest
 lsststack::lsstsw::lsst_build_repo: 'https://github.com/lsst/lsst_build.git'
 lsststack::lsstsw::lsst_build_branch: master
 lsststack::lsstsw::lsst_build_ensure: present
+consul::config_hash:
+  data_dir: '/opt/consul'
+  client_addr: '0.0.0.0'
+docker:
+  tcp_bind: 'tcp://0.0.0.0:2375'
+  socket_bind: 'unix:///var/run/docker.sock'
 nginx::config::confd_purge: true
 nginx::config::vhost_purge: true
 nginx::config::spdy: 'on'
