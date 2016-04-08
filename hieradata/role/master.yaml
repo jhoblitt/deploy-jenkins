@@ -129,3 +129,10 @@ jenkins::plugin_hash:
     version: '5.5'
   job-dsl:
     version: '1.44'
+  kubernetes:
+    version: '0.5'
+  # kubernetes deps
+  durable-task:
+    version: '1.9'
+  # credentials
+  # /kubernetes deps
