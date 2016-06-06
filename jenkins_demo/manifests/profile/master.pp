@@ -20,6 +20,45 @@ class jenkins_demo::profile::master {
   jenkins_num_executors{ '0': ensure => present }
   jenkins_slaveagent_port{ '55555': ensure => present }
 
+  jenkins_exec { 'this is a test':
+    script => "
+import org.csanchez.jenkins.plugins.kubernetes.*
+import jenkins.model.*
+
+def j = Jenkins.getInstance()
+
+def k = new KubernetesCloud(
+  'jenkins-test',
+  null,
+  #'https://130.211.146.130',
+  'https://130.211.193.62',
+  'default',
+  'https://citest.lsst.codes/',
+  '10', 0, 0, 5
+)
+k.setSkipTlsVerify(true)
+k.setCredentialsId('ec5cf56b-71e9-4886-9f03-42934a399148')
+
+def p = new PodTemplate('centos:6', null)
+p.setName('centos6')
+p.setLabel('centos6-docker')
+p.setRemoteFs('/home/jenkins')
+
+k.addTemplate(p)
+
+p = new PodTemplate('lsstsqre/centos:7-jenkins', null)
+p.setName('centos7')
+p.setLabel('centos7-docker')
+p.setRemoteFs('/home/jenkins')
+
+k.addTemplate(p)
+
+j.clouds.replace(k)
+j.save()
+    ",
+    logoutput => true,
+  }
+
   $admin_key_path  = '/usr/lib/jenkins/admin_private_key'
   $j = hiera('jenkinsx', undef)
 
@@ -33,6 +72,7 @@ class jenkins_demo::profile::master {
 
   class { 'jenkins::cli::config':
     ssh_private_key => $admin_key_path,
+    cli_tries       => 10,
   }
 
   $user_hash = hiera('jenkinsx::user', undef)
