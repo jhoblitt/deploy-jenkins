@@ -57,6 +57,6 @@ class jenkins_demo::profile::jenkins::agent(
   # provides killall on el6 & el7
   ensure_packages(['psmisc'])
   ensure_packages(['lsof'])
-  # unzip is needed my packer-newintsall
+  # unzip is needed by packer-layercake
   ensure_packages(['unzip'])
 }
