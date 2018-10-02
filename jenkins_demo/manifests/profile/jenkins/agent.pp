@@ -3,6 +3,7 @@ class jenkins_demo::profile::jenkins::agent(
   Optional[Variant[Array[String], String]] $labels = undef,
   Boolean                      $use_default_labels = true,
   Integer                               $executors = 1,
+  String                                $masterurl = 'http://jenkins-master:8080',
 ) {
   if $::operatingsystemmajrelease == '7' {
     include ::docker
@@ -26,11 +27,11 @@ class jenkins_demo::profile::jenkins::agent(
       minute  => '0',
       hour    => '4',
     }
-    Class[::docker] -> Class[::jenkins::slave]
   } else {
     $docker = undef
   }
 
+  # XXX migrate to hiera?
   $default_labels = [
     $::hostname,
     downcase($::os['name']),
@@ -38,20 +39,11 @@ class jenkins_demo::profile::jenkins::agent(
     $docker,
   ]
 
+  # XXX migrate to hiera?
   if ($use_default_labels) {
     $real_labels = concat($default_labels, $labels)
   } else {
     $real_labels = $labels
-  }
-
-  class { 'jenkins::slave':
-    masterurl    => 'http://jenkins-master:8080',
-    slave_name   => $::hostname,
-    slave_home   => '/j',
-    slave_groups => $docker,
-    slave_mode   => $slave_mode,
-    executors    => $executors,
-    labels       => join(delete_undef_values($real_labels), ' '),
   }
 
   # provides killall on el6 & el7
@@ -59,4 +51,22 @@ class jenkins_demo::profile::jenkins::agent(
   ensure_packages(['lsof'])
   # unzip is needed by packer-layercake
   ensure_packages(['unzip'])
+
+  $user  = 'jenkins-swarm'
+  $magic = 444
+
+  group { $user:
+    ensure => present,
+    gid    => $magic,
+  }
+
+  user { $user:
+    ensure     => present,
+    comment    => 'Jenkins Swarm Client user',
+    home       => '/j',
+    managehome => true,
+    system     => true,
+    uid        => $magic,
+    groups     => ['jenkins-swarm'],
+  }
 }
