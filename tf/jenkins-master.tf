@@ -25,6 +25,7 @@ resource "helm_release" "jenkins" {
     "null_resource.eks_ready",
     "module.tiller",
     "kubernetes_persistent_volume_claim.master_pvc",
+    "helm_release.prometheus_operator",
   ]
 }
 
