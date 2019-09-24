@@ -136,7 +136,7 @@ variable "casc_vault_token" {
 
 locals {
   # remove "<env>-" prefix for production
-  dns_prefix = "${replace("${var.env_name}-", "jenkins-prod-", "")}"
+  dns_prefix = "${replace("${var.env_name}-", "prod-", "")}"
 
   master_fqdn  = "${local.dns_prefix}${var.deploy_name}.${var.domain_name}"
   master_alias = "${var.master_fqdn != "" ? var.master_fqdn : local.master_fqdn}"
