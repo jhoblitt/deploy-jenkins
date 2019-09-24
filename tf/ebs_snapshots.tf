@@ -3,7 +3,7 @@ locals {
 }
 
 resource "aws_iam_role" "dlm_lifecycle_role" {
-  name = "dlm-lifecycle-role"
+  name = "${var.env_name}-dlm-lifecycle-role"
 
   assume_role_policy = <<EOF
 {
@@ -23,7 +23,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "dlm_lifecycle" {
-  name = "dlm-lifecycle-policy"
+  name = "${var.env_name}-dlm-lifecycle-policy"
   role = "${aws_iam_role.dlm_lifecycle_role.id}"
 
   policy = <<EOF
