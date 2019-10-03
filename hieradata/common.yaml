@@ -61,7 +61,7 @@ jenkinsx::master:
         value: https://vault.lsst.codes
       - name: CASC_VAULT_ENGINE_VERSION
         value: '2'
-    javaOpts: >
+    javaOpts: >-
       -server
       -XX:+AlwaysPreTouch
       -Xms2G
