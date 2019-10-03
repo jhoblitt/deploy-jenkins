@@ -1,5 +1,10 @@
 ---
 # yamllint disable rule:line-length
+jenkinsx::master:
+  master:
+    containerEnv:
+      - name: CASC_VAULT_PATHS
+        value: "${vault_root}/dockerhub,${vault_root}/ghslacker,${vault_root}/github_api,${vault_root}/github_oauth,${vault_root}/scipipe-publish,${vault_root}/slack,${vault_root}/versiondb_ssh"
 jenkinsx::casc:
   credentials:
     system:
