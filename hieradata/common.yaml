@@ -232,10 +232,13 @@ jenkinsx::master:
             - "${jenkins_fqdn}"
     prometheus:
       enabled: true
-    agent:
-      enabled: false
-    persistence:
-      enabled: true
-      existingClaim: "master-pvc"
-    backup:
-      enabled: false
+  agent:
+    enabled: false
+  persistence:
+    enabled: true
+    existingClaim: "${pvc_name}"
+    accessMode: "ReadWriteOnce"
+    size: "${vol_size}"
+  backup:
+    enabled: false
+  checkDeprecation: true

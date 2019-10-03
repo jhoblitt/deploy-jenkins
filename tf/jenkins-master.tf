@@ -37,7 +37,9 @@ data "template_file" "jenkins_values" {
     env_name               = "${var.env_name}"
     jenkins_fqdn           = "${local.master_fqdn}"
     jenkins_secret_name    = "${kubernetes_secret.jenkins_tls.metadata.0.name}"
+    pvc_name               = "${kubernetes_persistent_volume_claim.master_pvc.metadata.0.name}"
     vault_root             = "${local.vault_root}"
+    vol_size               = "${local.vol_size}"
   }
 }
 
