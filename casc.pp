@@ -61,7 +61,12 @@ if $casc {
   notice('merged config:')
   notice(inline_template("<%- require 'yaml'-%><%= YAML.dump(@real_master) %>"))
 
-  file { "${::pwd}/tf/charts/jenkins.yaml":
+  $env_dir = "${::pwd}/tf/charts/env"
+  file { $env_dir:
+    ensure => directory,
+  }
+
+  file { "${env_dir}/${::env_name}.yaml":
     content => inline_template("<%- require 'yaml'-%><%= YAML.dump(@real_master) %>"),
   }
 }
