@@ -29,7 +29,7 @@ resource "helm_release" "jenkins" {
 }
 
 data "template_file" "jenkins_values" {
-  template = "${file("${path.module}/charts/jenkins.yaml")}"
+  template = "${file("${path.module}/charts/env/${var.env_name}.yaml")}"
 
   vars {
     admin_email            = "nobody@${var.domain_name}"

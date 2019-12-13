@@ -1,0 +1,591 @@
+---
+master:
+  image: jenkins/jenkins
+  imageTag: 2.176.3
+  imagePullPolicy: Always
+  numExecutors: 0
+  useSecurity: true
+  adminUser: admin
+  resources:
+    requests:
+      cpu: '3'
+      memory: 8Gi
+    limits:
+      cpu: '3'
+      memory: 8Gi
+  containerEnv:
+  - name: CASC_VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: "${casc_vault_secret_name}"
+        key: CASC_VAULT_TOKEN
+  - name: CASC_VAULT_URL
+    value: https://vault.lsst.codes
+  - name: CASC_VAULT_ENGINE_VERSION
+    value: '2'
+  - name: CASC_VAULT_PATHS
+    value: "${vault_root}/agent_ssh,${vault_root}/cmirror,${vault_root}/dockerhub,${vault_root}/ghslacker,${vault_root}/github_api,${vault_root}/github_backup,${vault_root}/github_oauth,${vault_root}/ltd_keeper,${vault_root}/ltd_mason,${vault_root}/scipipe-publish,${vault_root}/slack,${vault_root}/squash_api,${vault_root}/versiondb_ssh"
+  javaOpts: "-server -XX:+AlwaysPreTouch -Xms2G -Xmx4G -XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent
+    -XX:+ParallelRefProcEnabled -XX:+UseStringDeduplication -XX:+UnlockExperimentalVMOptions
+    -XX:G1NewSizePercent=20 -XX:+UnlockDiagnosticVMOptions -XX:G1SummarizeRSetStatsPeriod=1
+    -Dhudson.slaves.WorkspaceList=_ -Dhudson.security.csrf.requestfield=Jenkins-crumb
+    -Dhudson.model.Slave.workspaceRoot=ws -Djenkins.CLI.disabled=false -Djava.awt.headless=true
+    -Djenkins.install.runSetupWizard=false"
+  usePodSecurityContext: true
+  runAsUser: 1000
+  fsGroup: 1000
+  servicePort: 8080
+  targetPort: 8080
+  serviceType: ClusterIP
+  slaveListenerPort: 55555
+  slaveListenerServiceType: ClusterIP
+  overwritePlugins: true
+  installPlugins:
+  - swarm:3.15
+  - credentials:2.2.0
+  - command-launcher:1.3
+  - support-core:2.56
+  - metrics:4.0.2.3
+  - jackson2-api:2.9.9
+  - bouncycastle-api:2.17
+  - junit:1.28
+  - script-security:1.60
+  - plain-credentials:1.5
+  - icon-shim:2.0.3
+  - github:1.29.4
+  - token-macro:2.7
+  - git:3.10.0
+  - github-api:1.95
+  - scm-api:2.4.1
+  - git-client:2.7.7
+  - github-oauth:0.32
+  - mailer:1.23
+  - display-url-api:2.3.1
+  - credentials-binding:1.19
+  - nodelabelparameter:1.7.2
+  - jquery:1.12.4-0
+  - postbuildscript:2.8.1
+  - maven-plugin:3.2
+  - apache-httpcomponents-client-4-api:4.5.5-3.0
+  - jsch:0.1.55
+  - javadoc:1.5
+  - greenballs:1.15
+  - rebuild:1.31
+  - build-user-vars-plugin:1.5
+  - envinject:2.1.6
+  - envinject-api:1.5
+  - purge-build-queue-plugin:1.0
+  - ssh-credentials:1.16
+  - ssh-slaves:1.29.4
+  - antisamy-markup-formatter:1.5
+  - external-monitor-job:1.7
+  - parameterized-trigger:2.35.2
+  - conditional-buildstep:1.3.6
+  - matrix-project:1.14
+  - run-condition:1.2
+  - durable-task:1.29
+  - multiple-scms:0.6
+  - cloudbees-folder:6.8
+  - job-dsl:1.74
+  - structs:1.19
+  - workflow-scm-step:2.8
+  - windows-slaves:1.4
+  - matrix-auth:2.4.2
+  - workflow-aggregator:2.6
+  - lockable-resources:2.5
+  - jquery-detached:1.2.1
+  - workflow-api:2.34
+  - workflow-support:3.3
+  - workflow-step-api:2.20
+  - workflow-job:2.32
+  - pipeline-stage-view:2.11
+  - pipeline-rest-api:2.11
+  - handlebars:1.1.1
+  - momentjs:1.1.1
+  - pipeline-build-step:2.9
+  - ace-editor:1.1
+  - git-server:1.7
+  - branch-api:2.5.2
+  - workflow-durable-task-step:2.31
+  - pipeline-input-step:2.10
+  - pipeline-stage-step:2.3
+  - workflow-basic-steps:2.18
+  - workflow-cps:2.70
+  - workflow-cps-global-lib:2.13
+  - workflow-multibranch:2.21
+  - pipeline-milestone-step:1.3.1
+  - pipeline-graph-analysis:1.10
+  - pipeline-model-declarative-agent:1.1.1
+  - pipeline-model-api:1.3.8
+  - pipeline-model-definition:1.3.8
+  - pipeline-model-extensions:1.3.8
+  - pipeline-stage-tags-metadata:1.3.8
+  - copyartifact:1.42.1
+  - saferestart:0.3
+  - docker-workflow:1.18
+  - docker-commons:1.15
+  - authentication-tokens:1.3
+  - dockerhub-notification:2.4.0
+  - async-http-client:1.9.40.0
+  - ssh-agent:1.17
+  - groovy:2.2
+  - github-branch-source:2.5.3
+  - blueocean:1.16.0
+  - blueocean-core-js:1.16.0
+  - jenkins-design-language:1.16.0
+  - blueocean-autofavorite:1.2.4
+  - blueocean-commons:1.16.0
+  - blueocean-config:1.16.0
+  - blueocean-dashboard:1.16.0
+  - blueocean-display-url:2.3.0
+  - blueocean-events:1.16.0
+  - blueocean-github-pipeline:1.16.0
+  - blueocean-git-pipeline:1.16.0
+  - blueocean-i18n:1.16.0
+  - blueocean-jwt:1.16.0
+  - blueocean-personalization:1.16.0
+  - blueocean-pipeline-api-impl:1.16.0
+  - blueocean-pipeline-editor:1.16.0
+  - blueocean-pipeline-scm-api:1.16.0
+  - blueocean-rest:1.16.0
+  - blueocean-rest-impl:1.16.0
+  - blueocean-web:1.16.0
+  - blueocean-bitbucket-pipeline:1.16.0
+  - blueocean-jira:1.16.0
+  - blueocean-executor-info:1.16.0
+  - favorite:2.3.2
+  - pubsub-light:1.12
+  - sse-gateway:1.17
+  - variant:1.2
+  - jira:3.0.7
+  - htmlpublisher:1.18
+  - cloudbees-bitbucket-branch-source:2.4.4
+  - handy-uri-templates-2-api:2.1.7-1.0
+  - mercurial:2.6
+  - pipeline-utility-steps:2.3.0
+  - build-timeout:1.19
+  - jdk-tool:1.2
+  - prometheus:2.0.0
+  JCasC:
+    enabled: true
+    pluginVersion: 1.23
+    configScripts:
+      01-casc: |
+        ---
+        configuration-as-code:
+          version: 1
+          deprecated: warn
+          restricted: warn
+          unknown: warn
+        jenkins:
+          numExecutors: 0
+          slaveAgentPort: 55555
+          agentProtocols:
+          - JNLP4-connect
+          - Ping
+          remotingSecurity:
+            enabled: true
+          quietPeriod: 0
+          crumbIssuer:
+            standard:
+              excludeClientIPFromCrumb: true
+          authorizationStrategy:
+            globalMatrix:
+              grantedPermissions:
+              - Agent/Connect:sqre-user
+              - Agent/Create:sqre-user
+              - Overall/Administer:jhoblitt
+              - Overall/Administer:frossie
+              - Overall/Administer:lsst-sqre*square
+              - Overall/Administer:lsst-sqre*Leeroy Wranglers
+              - Overall/Read:lsst-sqre*Friends
+              - Job/Build:lsst-sqre*Friends
+              - Job/Cancel:lsst-sqre*Friends
+              - Job/Discover:lsst-sqre*Friends
+              - Job/Read:lsst-sqre*Friends
+              - Overall/Read:lsst*Data Management
+              - Job/Build:lsst*Data Management
+              - Job/Cancel:lsst*Data Management
+              - Job/Discover:lsst*Data Management
+              - Job/Read:lsst*Data Management
+              - Overall/Read:lsst*DM Contributors
+              - Job/Build:lsst*DM Contributors
+              - Job/Cancel:lsst*DM Contributors
+              - Job/Discover:lsst*DM Contributors
+              - Job/Read:lsst*DM Contributors
+              - Overall/Read:lsst*Simulations
+              - Job/Build:lsst*Simulations
+              - Job/Cancel:lsst*Simulations
+              - Job/Discover:lsst*Simulations
+              - Job/Read:lsst*Simulations
+              - Overall/Read:lsst-dm*Data Management
+              - Job/Build:lsst-dm*Data Management
+              - Job/Cancel:lsst-dm*Data Management
+              - Job/Discover:lsst-dm*Data Management
+              - Job/Read:lsst-dm*Data Management
+          securityRealm:
+            github:
+              clientID: "$${github_oauth_client_id}"
+              clientSecret: "$${github_oauth_client_secret}"
+              githubApiUri: https://api.github.com
+              githubWebUri: https://github.com
+              oauthScopes: read:org
+          nodes:
+          - permanent:
+              labelString: osx osx-10.13 high_sierra
+              mode: EXCLUSIVE
+              name: high_sierra-1
+              numExecutors: 1
+              remoteFS: "/Users/square/j"
+              launcher:
+                sSHLauncher:
+                  credentialsId: sqre-osx
+                  host: mac1.lsst.cloud
+                  launchTimeoutSeconds: 210
+                  maxNumRetries: 0
+                  port: 22
+                  retryWaitTime: 15
+                  prefixStartSlaveCmd: export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin;
+                  sshHostKeyVerificationStrategy:
+                    manuallyTrustedKeyVerificationStrategy:
+                      requireInitialManualTrust: true
+              nodeProperties:
+              - envVars:
+                  env:
+                  - key: PATH+LOCAL_BIN
+                    value: "/usr/local/bin"
+          - permanent:
+              labelString: osx osx-10.13 high_sierra
+              mode: EXCLUSIVE
+              name: high_sierra-2
+              numExecutors: 1
+              remoteFS: "/Users/square/j"
+              launcher:
+                sSHLauncher:
+                  credentialsId: sqre-osx
+                  host: mac2.lsst.cloud
+                  launchTimeoutSeconds: 210
+                  maxNumRetries: 0
+                  port: 22
+                  retryWaitTime: 15
+                  prefixStartSlaveCmd: export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin;
+                  sshHostKeyVerificationStrategy:
+                    manuallyTrustedKeyVerificationStrategy:
+                      requireInitialManualTrust: true
+              nodeProperties:
+              - envVars:
+                  env:
+                  - key: PATH+LOCAL_BIN
+                    value: "/usr/local/bin"
+          - permanent:
+              labelString: osx osx-10.14 mojave
+              mode: EXCLUSIVE
+              name: mojave-1
+              numExecutors: 1
+              remoteFS: "/Users/square/j"
+              launcher:
+                sSHLauncher:
+                  credentialsId: sqre-osx
+                  host: mac3.lsst.cloud
+                  launchTimeoutSeconds: 210
+                  maxNumRetries: 0
+                  port: 22
+                  retryWaitTime: 15
+                  prefixStartSlaveCmd: export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin;
+                  sshHostKeyVerificationStrategy:
+                    manuallyTrustedKeyVerificationStrategy:
+                      requireInitialManualTrust: true
+              nodeProperties:
+              - envVars:
+                  env:
+                  - key: PATH+LOCAL_BIN
+                    value: "/usr/local/bin"
+          - permanent:
+              labelString: osx osx-10.14 mojave
+              mode: EXCLUSIVE
+              name: mojave-2
+              numExecutors: 1
+              remoteFS: "/Users/square/j"
+              launcher:
+                sSHLauncher:
+                  credentialsId: sqre-osx
+                  host: mac4.lsst.cloud
+                  launchTimeoutSeconds: 210
+                  maxNumRetries: 0
+                  port: 22
+                  retryWaitTime: 15
+                  prefixStartSlaveCmd: export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin;
+                  sshHostKeyVerificationStrategy:
+                    manuallyTrustedKeyVerificationStrategy:
+                      requireInitialManualTrust: true
+              nodeProperties:
+              - envVars:
+                  env:
+                  - key: PATH+LOCAL_BIN
+                    value: "/usr/local/bin"
+          - permanent:
+              labelString: osx osx-10.14 mojave
+              mode: EXCLUSIVE
+              name: mojave-3
+              numExecutors: 1
+              remoteFS: "/Users/square/j"
+              launcher:
+                sSHLauncher:
+                  credentialsId: sqre-osx
+                  host: mac5.lsst.cloud
+                  launchTimeoutSeconds: 210
+                  maxNumRetries: 0
+                  port: 22
+                  retryWaitTime: 15
+                  prefixStartSlaveCmd: export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin;
+                  sshHostKeyVerificationStrategy:
+                    manuallyTrustedKeyVerificationStrategy:
+                      requireInitialManualTrust: true
+              nodeProperties:
+              - envVars:
+                  env:
+                  - key: PATH+LOCAL_BIN
+                    value: "/usr/local/bin"
+          - permanent:
+              labelString: osx osx-10.14 mojave
+              mode: EXCLUSIVE
+              name: mojave-4
+              numExecutors: 1
+              remoteFS: "/Users/square/j"
+              launcher:
+                sSHLauncher:
+                  credentialsId: sqre-osx
+                  host: mac6.lsst.cloud
+                  launchTimeoutSeconds: 210
+                  maxNumRetries: 0
+                  port: 22
+                  retryWaitTime: 15
+                  prefixStartSlaveCmd: export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin;
+                  sshHostKeyVerificationStrategy:
+                    manuallyTrustedKeyVerificationStrategy:
+                      requireInitialManualTrust: true
+              nodeProperties:
+              - envVars:
+                  env:
+                  - key: PATH+LOCAL_BIN
+                    value: "/usr/local/bin"
+        unclassified:
+          location:
+            url: https://${jenkins_fqdn}
+            adminAddress: "${admin_email}"
+          githubpluginconfig:
+            configs:
+            - credentialsId: github-api-token-sqreadmin
+        security:
+          remotingCLI:
+            enabled: false
+          GlobalJobDslSecurityConfiguration:
+            useScriptSecurity: false
+        jobs:
+        - script: |
+            folder('sqre') {
+              description('SQRE mission related jobs')
+            }
+            folder('sqre/seeds') {}
+
+            job('sqre/seeds/dm-jobs') {
+              concurrentBuild(false)
+
+              scm {
+                git {
+                  remote {
+                    url('https://github.com/lsst-dm/jenkins-dm-jobs')
+                  }
+                  branch('*/master')
+                }
+              } // scm
+
+              triggers {
+                githubPush()
+              }
+
+              steps {
+                shell('./gradlew libs')
+
+                jobDsl {
+                  targets('jobs/*.groovy')
+                  useScriptText(false)
+                  ignoreExisting(false)
+                  ignoreMissingFiles(false)
+                  removedJobAction('DELETE')
+                  removedViewAction('IGNORE')
+                  lookupStrategy('JENKINS_ROOT')
+                  additionalClasspath('lib/*.jar')
+                }
+              } // steps
+            } // job
+        credentials:
+          system:
+            domainCredentials:
+            - credentials:
+              - string:
+                  id: jenkins-env
+                  scope: GLOBAL
+                  description: Name of Jenkins deployment
+                  secret: "${env_name}"
+              - usernamePassword:
+                  id: aws-jenkins-master-snapshot
+                  scope: GLOBAL
+                  description: jenkins master snapshot AWS credentials
+                  username: "$${snapshot_aws_access_key_id}"
+                  password: "$${snapshot_aws_secret_access_key}"
+              - string:
+                  id: doxygen-url
+                  scope: GLOBAL
+                  description: URL of doxygen site
+                  secret: "$${doxygen_url}"
+              - string:
+                  id: eups-url
+                  scope: GLOBAL
+                  description: URL of eups site
+                  secret: "$${eups_url}"
+              - usernamePassword:
+                  id: aws-eups-push
+                  scope: GLOBAL
+                  description: push EUPS packages -> s3
+                  username: "$${eups_push_aws_access_key_id}"
+                  password: "$${eups_push_aws_secret_access_key}"
+              - string:
+                  id: eups-push-bucket
+                  scope: GLOBAL
+                  description: name of EUPS s3 bucket
+                  secret: "$${eups_s3_bucket}"
+              - usernamePassword:
+                  id: aws-eups-backup
+                  scope: GLOBAL
+                  description: backup EUPS s3 bucket -> s3 bucket
+                  username: "$${eups_backup_aws_access_key_id}"
+                  password: "$${eups_backup_aws_secret_access_key}"
+              - string:
+                  id: eups-backup-bucket
+                  scope: GLOBAL
+                  description: name of EUPS backup s3 bucket
+                  secret: "$${eups_backup_s3_bucket}"
+              - usernamePassword:
+                  id: aws-eups-tag-admin
+                  scope: GLOBAL
+                  description: manage eups distrib tags in s3 bucket
+                  username: "$${eups_tag_admin_aws_access_key_id}"
+                  password: "$${eups_tag_admin_aws_secret_access_key}"
+              - usernamePassword:
+                  id: aws-doxygen-push
+                  scope: GLOBAL
+                  description: push doxygen builds -> s3
+                  username: "$${doxygen_push_aws_access_key_id}"
+                  password: "$${doxygen_push_aws_secret_access_key}"
+              - string:
+                  id: doxygen-push-bucket
+                  scope: GLOBAL
+                  description: name of doxygen s3 bucket
+                  secret: "$${doxygen_s3_bucket}"
+              - string:
+                  id: cmirror-s3-bucket
+                  scope: GLOBAL
+                  description: name of conda channel bucket
+                  secret: conda-mirror.lsst.codes
+              - string:
+                  id: slack-lsstc-token
+                  scope: GLOBAL
+                  description: slack lsstc org API token
+                  secret: "$${slack_api_token}"
+              - usernamePassword:
+                  id: ghslacker
+                  scope: GLOBAL
+                  description: api.lsst.codes/ghslacker
+                  username: "$${ghslacker_user}"
+                  password: "$${ghslacker_pass}"
+              - string:
+                  id: github-api-token-sqreadmin
+                  scope: GLOBAL
+                  description: github API personal access token (sqreadmincurly)
+                  secret: "$${github_api_token}"
+              - basicSSHUserPrivateKey:
+                  id: github-jenkins-versiondb
+                  scope: GLOBAL
+                  description: github <target org>/versiondb deploy key
+                  username: git
+                  privateKeySource:
+                    directEntry:
+                      privateKey: "$${versiondb_ssh_private_key}"
+              - usernamePassword:
+                  id: dockerhub-sqreadmin
+                  scope: GLOBAL
+                  description: dockerhub (sqreadmincurly)
+                  username: "$${dockerhub_user}"
+                  password: "$${dockerhub_pass}"
+              - string:
+                  id: slack-default-channel
+                  scope: GLOBAL
+                  description: Default slack channel
+                  secret: dm-jenkins
+              - string:
+                  id: slack-channel-prefix
+                  scope: GLOBAL
+                  description: Prefix for generated slack channels
+                  secret: dmj
+              - basicSSHUserPrivateKey:
+                  id: sqre-osx
+                  scope: GLOBAL
+                  description: SQRE OSX build agents
+                  username: "$${osx_ssh_user}"
+                  privateKeySource:
+                    directEntry:
+                      privateKey: "$${osx_ssh_private_key}"
+              - usernamePassword:
+                  id: aws-cmirror-push
+                  scope: GLOBAL
+                  description: push conda packages -> s3
+                  username: "$${cmirror_aws_access_key_id}"
+                  password: "$${cmirror_aws_secret_access_key}"
+              - usernamePassword:
+                  id: github_backup
+                  scope: GLOBAL
+                  description: github_backup AWS credentials
+                  username: "$${github_backup_aws_access_key_id}"
+                  password: "$${github_backup_aws_secret_access_key}"
+              - usernamePassword:
+                  id: squash-api-user
+                  scope: GLOBAL
+                  description: user/pass for Squash API endpoint
+                  username: "$${squash_api_user}"
+                  password: "$${squash_api_pass}"
+              - usernamePassword:
+                  id: ltd-mason-aws
+                  scope: GLOBAL
+                  description: ltd-mason
+                  username: "$${ltd_mason_aws_access_key_id}"
+                  password: "$${ltd_mason_aws_secret_access_key}"
+              - usernamePassword:
+                  id: ltd-keeper
+                  scope: GLOBAL
+                  description: ltd-keeper
+                  username: "$${ltd_keeper_user}"
+                  password: "$${ltd_keeper_pass}"
+  sidecars:
+    configAutoReload:
+      enabled: true
+  overwriteConfig: true
+  ingress:
+    enabled: true
+    hostName: "${jenkins_fqdn}"
+    tls:
+    - secretName: "${jenkins_secret_name}"
+      hosts:
+      - "${jenkins_fqdn}"
+  prometheus:
+    enabled: true
+agent:
+  enabled: false
+persistence:
+  enabled: true
+  existingClaim: "${pvc_name}"
+  accessMode: ReadWriteOnce
+  size: "${vol_size}"
+backup:
+  enabled: false
+checkDeprecation: true

@@ -5,7 +5,7 @@ shopt -s globstar nullglob
 
 CHECK=( **/*.{yaml,yml,.eyaml} .*.{yml,yaml} )
 EYAML=( **/*.eyaml )
-IGNORE=()
+IGNORE=( **/tf/charts/env/*.yaml )
 CONF_FILE=".yamllint.yaml"
 
 # filter out plain text versions of .eyaml files
