@@ -12,3 +12,5 @@ affinity:
               operator: In
               values:
                 - admin
+podAnnotations:
+  cluster-autoscaler.kubernetes.io/safe-to-evict: "true"

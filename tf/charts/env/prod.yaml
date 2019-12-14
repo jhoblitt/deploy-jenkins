@@ -3,6 +3,8 @@ master:
   image: jenkins/jenkins
   imageTag: 2.176.3
   imagePullPolicy: Always
+  podAnnotations:
+    cluster-autoscaler.kubernetes.io/safe-to-evict: 'true'
   numExecutors: 0
   useSecurity: true
   adminUser: admin

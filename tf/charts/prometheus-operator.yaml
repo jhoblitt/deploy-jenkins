@@ -16,8 +16,12 @@ prometheusOperator:
                 operator: In
                 values:
                   - admin
+  podAnnotations:
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
 grafana:
   # stable/grafana chart release values
+  podAnnotations:
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
 
   # Add a persistent volume to maintain dashboards between restarts
   persistence:

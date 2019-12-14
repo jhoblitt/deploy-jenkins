@@ -29,3 +29,8 @@ affinity:
               operator: In
               values:
                 - admin
+extraArgs:
+  skip-nodes-with-system-pods: false
+  skip-nodes-with-local-storage: false
+podAnnotations:
+  cluster-autoscaler.kubernetes.io/safe-to-evict: "true"

@@ -4,6 +4,8 @@ rbac:
 controller:
   stats:
     enabled: true
+  podAnnotations:
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
   metrics:
     enabled: true
     service:
